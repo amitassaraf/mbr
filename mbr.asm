@@ -74,7 +74,7 @@ print_letter:
 	mov bp, sp
 	xor bh, bh
 	mov cx, 0x1
-	mov al, [bp + 4]           ; Print the letter to the screen to indicated the MBR finished
+	mov al, [bp + 4]
 	mov ah, 0x0e
 	int 0x10
 	pop bp
