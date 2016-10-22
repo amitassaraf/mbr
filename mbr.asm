@@ -6,6 +6,7 @@ A20_DISABLED equ 0x0
 
 
 mbr:						; Main sequence
+	mov sp, 0x500
 	call disable_a20        ; Disable A20 in the beggining
 check:
 	call check_a20_enabled  ; Check if A20 is enabled
@@ -51,29 +52,33 @@ a20_enabled:
 	ret
 
 print_enabled:
-	xor bh, bh
-	mov cx, 0x1
-	mov al, 0x79           ; Print 'y' to the screen to indicated A20 is on
-	mov ah, 0x0e
-	int 0x10
+	push 0x79
+	call print_letter   ; Print 'y' to the screen to indicated A20 is enabled
+	add sp, 2
 	ret
 
 print_disabled:
-	xor bh, bh
-	mov cx, 0x1
-	mov al, 0x6e           ; Print 'n' to the screen to indicated A20 is off
-	mov ah, 0x0e
-	int 0x10
+	push 0x6e
+	call print_letter    ; Print 'n' to the screen to indicated A20 is disabled
+	add sp, 2
 	ret
 
 print_done:
-	xor bh, bh
-	mov cx, 0x1
-	mov al, 0x64           ; Print 'd' to the screen to indicated the MBR finished
-	mov ah, 0x0e
-	int 0x10
+	push 0x64
+	call print_letter     ; Print 'd' to the screen to indicated the MBR finished
+	add sp, 2
 	ret
 
+print_letter:
+	push bp
+	mov bp, sp
+	xor bh, bh
+	mov cx, 0x1
+	mov al, [bp + 4]           ; Print the letter to the screen to indicated the MBR finished
+	mov ah, 0x0e
+	int 0x10
+	pop bp
+	ret
 
 exit:
 	call print_done
