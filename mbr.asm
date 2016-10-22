@@ -6,7 +6,6 @@ A20_DISABLED equ 0x0
 
 
 mbr:						; Main sequence
-	mov sp, 0x500
 	call disable_a20        ; Disable A20 in the beggining
 check:
 	call check_a20_enabled  ; Check if A20 is enabled
